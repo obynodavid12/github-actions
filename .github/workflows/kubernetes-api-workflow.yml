@@ -32,17 +32,10 @@ jobs:
           POD_NAMES=$(kubectl get pods -A -o json | jq -r '.items[].metadata.name' | paste -sd "," -)
           echo "pods=$POD_NAMES" >> $GITHUB_OUTPUT
 
-<<<<<<< HEAD
-      # - name: Locate TXT files
-      #   id: locate_txt
-      #   run: |
-      #     TXT_FILES=$(find ./github-actions -name '*.txt')
-      #     echo "::set-output name=txt_files::$TXT_FILES"
-=======
       - name: Locate TXT files
         id: locate_txt    
         run: |
           echo "Locating all .txt files..."
           TXT_FILES=$(find . -name '*.txt' | paste -sd "," -)
           echo "txt_files=$TXT_FILES" >> $GITHUB_OUTPUT
->>>>>>> e9e5073 (pushing file)
+
