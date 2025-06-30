@@ -36,6 +36,6 @@ jobs:
         id: locate_txt    
         run: |
           echo "Locating all .txt files..."
-          TXT_FILES=$(find ./github-actions -name '*.txt' | paste -sd "," -)
+          TXT_FILES=$(find $GITHUB_WORKSPACE -name '*.txt' | paste -sd "," -)
           echo "txt_files=$TXT_FILES" >> $GITHUB_OUTPUT
 
