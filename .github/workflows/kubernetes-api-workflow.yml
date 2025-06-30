@@ -37,5 +37,5 @@ jobs:
         run: |
           echo "Locating all .txt files..."
           TXT_FILES=$(find . -name '*.txt' | paste -sd "," -)
-          echo "txt_files=$TXT_FILES" >> $GITHUB_OUTPUT
+          echo "txt_files=$TXT_FILES"
 
