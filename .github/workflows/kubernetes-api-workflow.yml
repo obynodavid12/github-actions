@@ -1,4 +1,5 @@
 name: Kubernetes API Workflow
+
 on:
   push:
     branches:
@@ -10,27 +11,38 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
-      # - name: Configure Kubeconfig
-      #   uses: azure/k8s-set-context@v4
-      #   with:
-      #     method: kubeconfig
-      #     kubeconfig: ${{ secrets.KUBE_CONFIG }}
 
-      - name: Set up Kubectl
+
+      - name: Set up kubeconfig
         run: |
-            mkdir -p ${GITHUB_WORKSPACE}/kubeconfig
-            echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > ${GITHUB_WORKSPACE}/kubeconfig/config
-            echo "KUBECONFIG=${GITHUB_WORKSPACE}/kubeconfig/config" >> $GITHUB_ENV
-            
-      - name: Get Kubernetes Pod
+          mkdir -p "${HOME}/.kube"
+          echo "${{ secrets.KUBE_CONFIG }}" > "${HOME}/.kube/config"
+          chmod 600 "${HOME}/.kube/config"
+          echo "KUBECONFIG=${HOME}/.kube/config" >> $GITHUB_ENV
+
+      - name: Install kubectl and jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y kubectl jq
+
+      - name: Get Kubernetes Pods
         id: get_pods
         run: |
-          kubectl get pods -A
-          echo "::set-output name=pods::$(kubectl get pods -A -o json | jq -r '.items[] | .metadata.name')"
+          echo "Fetching all pods..."
+          POD_NAMES=$(kubectl get pods -A -o json | jq -r '.items[].metadata.name' | paste -sd "," -)
+          echo "pods=$POD_NAMES" >> $GITHUB_OUTPUT
 
+<<<<<<< HEAD
       # - name: Locate TXT files
       #   id: locate_txt
       #   run: |
       #     TXT_FILES=$(find ./github-actions -name '*.txt')
       #     echo "::set-output name=txt_files::$TXT_FILES"
+=======
+      - name: Locate TXT files
+        id: locate_txt    
+        run: |
+          echo "Locating all .txt files..."
+          TXT_FILES=$(find . -name '*.txt' | paste -sd "," -)
+          echo "txt_files=$TXT_FILES" >> $GITHUB_OUTPUT
+>>>>>>> e9e5073 (pushing file)
