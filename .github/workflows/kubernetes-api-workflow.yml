@@ -15,14 +15,16 @@ jobs:
 
       - name: Configure Kubernetes
         uses: azure/k8s-set-context@v3
-        # with:
-        #   kubeconfig: ${{ secrets.KUBE_CONFIG }}
+        with:
+          kubeconfig: ${{ secrets.KUBE_CONFIG }}
 
       - name: Set up Kubectl
         run: |
-            mkdir ${HOME}/.kube
-            echo ${{ secrets.KUBE_CONFIG }} | base64 --decode >  ${GITHUB_WORKSPACE}/kubeconfig
-            echo "KUBECONFIG=${GITHUB_WORKSPACE}/kubeconfig" >> $GITHUB_ENV
+            mkdir -p ${GITHUB_WORKSPACE}/.kube
+            echo ${{ secrets.KUBE_CONFIG }} | base64 --decode > ${GITHUB_WORKSPACE}/.kube/config
+            echo "KUBE_CONFIG=${GITHUB_WORKSPACE}/.kube/config" >> $GITHUB_ENV
+            # echo ${{ secrets.KUBE_CONFIG }} | base64 --decode >  ${GITHUB_WORKSPACE}/kubeconfig
+            # echo "KUBE_CONFIG=${GITHUB_WORKSPACE}/kubeconfig" >> $GITHUB_ENV
 
       - name: Get Kubernetes Pod
         id: get_pods
