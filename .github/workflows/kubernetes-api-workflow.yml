@@ -1,5 +1,4 @@
 name: Kubernetes API Workflow
-
 on:
   push:
     branches:
@@ -7,15 +6,15 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
-
+    runs-on: ubuntu-22.04
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Configure Kubernetes
-        uses: azure/k8s-set-context@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Configure Kubeconfig
+        uses: azure/k8s-set-context@v4
         with:
+          method: kubeconfig
           kubeconfig: ${{ secrets.KUBE_CONFIG }}
 
       - name: Set up Kubectl
@@ -23,17 +22,15 @@ jobs:
             mkdir -p ${GITHUB_WORKSPACE}/.kube
             echo ${{ secrets.KUBE_CONFIG }} | base64 --decode > ${GITHUB_WORKSPACE}/.kube/config
             echo "KUBE_CONFIG=${GITHUB_WORKSPACE}/.kube/config" >> $GITHUB_ENV
-            # echo ${{ secrets.KUBE_CONFIG }} | base64 --decode >  ${GITHUB_WORKSPACE}/kubeconfig
-            # echo "KUBE_CONFIG=${GITHUB_WORKSPACE}/kubeconfig" >> $GITHUB_ENV
-
+            
       - name: Get Kubernetes Pod
         id: get_pods
         run: |
           kubectl get pods -A
           echo "::set-output name=pods::$(kubectl get pods -A -o json | jq -r '.items[] | .metadata.name')"
 
-      - name: Locate TXT files
-        id: locate_txt
-        run: |
-          TXT_FILES=$(find ./github-actions -name '*.txt')
-          echo "::set-output name=txt_files::$TXT_FILES"
+      # - name: Locate TXT files
+      #   id: locate_txt
+      #   run: |
+      #     TXT_FILES=$(find ./github-actions -name '*.txt')
+      #     echo "::set-output name=txt_files::$TXT_FILES"
