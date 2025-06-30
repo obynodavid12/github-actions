@@ -18,6 +18,11 @@ jobs:
         with:
           kubeconfig: ${{ secrets.KUBE_CONFIG }}
 
+      - name: Set up Kubectl
+        run: |
+            mkdir ${HOME}/.kube
+            echo ${{ secrets.KUBECONFIG }} | base64 --decode > ${HOME}/.kube/config
+
       - name: Get Kubernetes Secret
         id: get_pods
         run: |
