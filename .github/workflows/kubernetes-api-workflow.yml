@@ -20,8 +20,8 @@ jobs:
       - name: Set up Kubectl
         run: |
             mkdir -p ${GITHUB_WORKSPACE}/kubeconfig
-            echo ${{ secrets.KUBE_CONFIG }} | base64 --decode > ${GITHUB_WORKSPACE}/kubeconfig
-            echo "KUBE_CONFIG=${GITHUB_WORKSPACE}/kubeconfig" >> $GITHUB_ENV
+            echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > ${GITHUB_WORKSPACE}/kubeconfig/config
+            echo "KUBECONFIG=${GITHUB_WORKSPACE}/kubeconfig/config" >> $GITHUB_ENV
             
       - name: Get Kubernetes Pod
         id: get_pods
