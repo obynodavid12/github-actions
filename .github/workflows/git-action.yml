@@ -3,7 +3,7 @@ name: Kubernetes API Workflow
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
