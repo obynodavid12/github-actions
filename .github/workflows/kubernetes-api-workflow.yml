@@ -37,5 +37,12 @@ jobs:
         run: |
           echo "Locating all .txt files..."
           TXT_FILES=$(find . -name '*.txt' | paste -sd "," -)
-          echo "txt_files=$TXT_FILES"
+          TXT_FILES=$(find $GITHUB_WORKSPACE -name '*.txt' | paste -sd "," -)
+          if [ -z "$TXT_FILES" ]; then
+            echo "No .txt files found."
+            TXT_FILES="none"
+          else
+            echo "Found .txt files: $TXT_FILES"
+          fi  
+          echo "txt_files=$TXT_FILES" >> $GITHUB_OUTPUT
 
