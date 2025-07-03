@@ -44,5 +44,5 @@ jobs:
           else
             echo "Found .txt files: $TXT_FILES"
           fi  
-          echo "txt_files=$TXT_FILES" >> $GITHUB_OUTPUT
+          echo "txt_files=$TXT_FILES"
 
