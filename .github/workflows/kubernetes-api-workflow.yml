@@ -30,7 +30,7 @@ jobs:
         run: |
           echo "Fetching all pods..."
           POD_NAMES=$(kubectl get pods -A -o json | jq -r '.items[].metadata.name' | paste -sd "," -)
-          echo "pods=$POD_NAMES" >> $GITHUB_OUTPUT
+          echo "pods=$POD_NAMES"
 
       - name: Locate TXT files
         id: locate_txt    
