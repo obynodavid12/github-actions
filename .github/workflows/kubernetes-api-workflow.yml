@@ -24,6 +24,19 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y kubectl jq
+      - name: Check system resources
+        run: |
+          echo "=== Memory ==="
+          free -h
+          echo "=== Disk ==="
+          df -h
+          echo "=== CPU ==="
+          nproc
+      - name: Create Kind cluster
+        uses: helm/kind-action@v1.8.0  # Try latest version
+        with:
+          cluster_name: kind-kind
+          wait: 300s
 
       - name: Get Kubernetes Pods
         id: get_pods
